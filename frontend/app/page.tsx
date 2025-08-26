@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export default function Home() {
   return (
@@ -12,15 +13,11 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-6 text-sm">
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#features">Features</a>
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#testimonials">Testimonials</a>
-            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#cta">Pricing</a>
           </div>
           <div className="flex items-center gap-3">
-            <a href="#cta" className="inline-flex h-10 items-center rounded-full border border-black/10 dark:border-white/15 px-4 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-              Sign in
-            </a>
-            <a href="#cta" className="inline-flex h-10 items-center rounded-full bg-indigo-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-              Get started
-            </a>
+            <a href="/auth/login" className="inline-flex h-10 items-center rounded-full border border-black/10 dark:border-white/15 px-4 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Login</a>
+            <a href="/auth/register" className="inline-flex h-10 items-center rounded-full bg-indigo-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Sign up</a>
+            <ThemeToggle />
           </div>
         </nav>
       </header>
@@ -46,14 +43,13 @@ export default function Home() {
                   InscribeAI helps you draft, edit, and polish content across emails, blogs, and docs. Generate on-brand copy in seconds with human-level clarity.
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                  <a href="#cta" className="inline-flex h-12 items-center justify-center rounded-full bg-indigo-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                    Start free trial
+                  <a href="/dashboard" className="inline-flex h-12 items-center justify-center rounded-full bg-indigo-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                    Open dashboard
                   </a>
                   <a href="#features" className="inline-flex h-12 items-center justify-center rounded-full border border-black/10 dark:border-white/15 px-6 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
-                    See features
+                    Learn more
                   </a>
                 </div>
-                <p className="mt-3 text-xs text-black/60 dark:text-white/60">No credit card required</p>
               </div>
               <div className="relative">
                 <div className="aspect-[4/3] w-full rounded-2xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 shadow-sm backdrop-blur overflow-hidden">
@@ -96,22 +92,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section id="cta" className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
-          <div className="rounded-2xl border border-black/10 dark:border-white/15 bg-gradient-to-br from-indigo-600 to-fuchsia-600 p-6 sm:p-10 text-white">
-            <div className="grid gap-6 sm:grid-cols-[1.5fr_1fr] items-center">
-              <div>
-                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">Start writing smarter today</h3>
-                <p className="mt-2 text-white/90">Try InscribeAI free for 7 days. Cancel anytime.</p>
-              </div>
-              <form className="flex flex-col sm:flex-row gap-3" aria-label="Email signup">
-                <label htmlFor="email" className="sr-only">Email</label>
-                <input id="email" name="email" type="email" placeholder="you@company.com" className="h-12 flex-1 rounded-full px-4 text-black placeholder:text-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" />
-                <button type="submit" className="h-12 rounded-full bg-white px-6 text-sm font-semibold text-indigo-700 hover:bg-white/95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Start free trial</button>
-              </form>
-            </div>
-          </div>
-        </section>
+        
       </main>
 
       <footer className="px-6 py-10 border-t border-black/5 dark:border-white/10">
