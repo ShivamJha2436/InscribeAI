@@ -48,9 +48,10 @@ export default function NotesPage() {
       }
 
       const data = await res.json();
-      setNotes(data);
+      setNotes(data || []);
     } catch (err: any) {
       setError(err.message || "Failed to load notes");
+      setNotes([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -97,7 +98,7 @@ export default function NotesPage() {
         <div>
           <h1 className="text-xl font-bold">Notes</h1>
           <p className="text-sm text-muted-foreground">
-            {notes.length === 0 ? "No notes yet" : `${notes.length} note${notes.length === 1 ? '' : 's'}`}
+            {notes && notes.length === 0 ? "No notes yet" : `${notes?.length || 0} note${(notes?.length || 0) === 1 ? '' : 's'}`}
           </p>
         </div>
         <button 
@@ -108,7 +109,7 @@ export default function NotesPage() {
         </button>
       </div>
 
-      {notes.length === 0 ? (
+      {notes && notes.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">Create your first note to get started!</p>
           <button 
@@ -120,7 +121,7 @@ export default function NotesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {notes.map((note) => (
+          {notes?.map((note) => (
             <NoteCard key={note.id} note={{
               id: note.id,
               title: note.title,

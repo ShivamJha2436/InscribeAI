@@ -48,9 +48,10 @@ export default function DashboardHomePage() {
       }
 
       const data = await res.json();
-      setNotes(data);
+      setNotes(data || []);
     } catch (err: any) {
       setError(err.message || "Failed to load notes");
+      setNotes([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -97,7 +98,7 @@ export default function DashboardHomePage() {
         <div>
           <h1 className="text-xl font-bold">Dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            {notes.length === 0 ? "No notes yet" : `${notes.length} note${notes.length === 1 ? '' : 's'}`}
+            {notes && notes.length === 0 ? "No notes yet" : `${notes?.length || 0} note${(notes?.length || 0) === 1 ? '' : 's'}`}
           </p>
         </div>
         <a href="/dashboard/notes" className="h-9 inline-flex items-center rounded-full border border-input px-3 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">
@@ -105,7 +106,7 @@ export default function DashboardHomePage() {
         </a>
       </div>
 
-      {notes.length === 0 ? (
+      {notes && notes.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">Create your first note to get started!</p>
         </div>
@@ -113,7 +114,7 @@ export default function DashboardHomePage() {
         <section>
           <h2 className="text-sm font-semibold mb-3">Recent notes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notes.slice(0, 6).map((note) => (
+            {notes?.slice(0, 6).map((note) => (
               <NoteCard key={note.id} note={{
                 id: note.id,
                 title: note.title,

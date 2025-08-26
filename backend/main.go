@@ -17,7 +17,7 @@ func main() {
 	// Get database connection string from environment
 	connString := os.Getenv("DATABASE_URL")
 	if connString == "" {
-		connString = "postgres://postgres:postgres@localhost:5432/inscribeai?sslmode=disable"
+		connString = "postgres://postgres:123@shivamjha@localhost:5432/postgres?sslmode=disable"
 		log.Println("Using default database URL:", connString)
 	}
 
