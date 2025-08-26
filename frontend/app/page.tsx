@@ -2,102 +2,166 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-white to-[#f7f7f8] dark:from-[#0a0a0a] dark:to-[#0f0f10] text-foreground">
+      <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-black/30 border-b border-black/5 dark:border-white/10">
+        <nav className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <span className="text-base sm:text-lg font-semibold tracking-tight">InscribeAI</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-6 text-sm">
+            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#features">Features</a>
+            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#testimonials">Testimonials</a>
+            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#cta">Pricing</a>
+          </div>
+          <div className="flex items-center gap-3">
+            <a href="#cta" className="inline-flex h-10 items-center rounded-full border border-black/10 dark:border-white/15 px-4 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+              Sign in
+            </a>
+            <a href="#cta" className="inline-flex h-10 items-center rounded-full bg-indigo-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+              Get started
+            </a>
+          </div>
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main>
+        {/* Hero */}
+        <section className="relative overflow-hidden">
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute -top-24 right-1/2 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl"></div>
+            <div className="absolute -bottom-24 left-1/2 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+          </div>
+          <div className="mx-auto max-w-6xl px-6 pt-16 sm:pt-24 pb-10 sm:pb-16">
+            <div className="grid items-center gap-10 lg:grid-cols-2">
+              <div>
+                <p className="inline-flex items-center gap-2 text-xs font-medium rounded-full border border-black/10 dark:border-white/15 px-2.5 py-1 text-black/70 dark:text-white/70">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  AI writing copilot for teams
+                </p>
+                <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1]">
+                  Write faster. Sound smarter. Stay on brand.
+                </h1>
+                <p className="mt-4 text-base sm:text-lg text-black/70 dark:text-white/70 leading-relaxed">
+                  InscribeAI helps you draft, edit, and polish content across emails, blogs, and docs. Generate on-brand copy in seconds with human-level clarity.
+                </p>
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <a href="#cta" className="inline-flex h-12 items-center justify-center rounded-full bg-indigo-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                    Start free trial
+                  </a>
+                  <a href="#features" className="inline-flex h-12 items-center justify-center rounded-full border border-black/10 dark:border-white/15 px-6 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
+                    See features
+                  </a>
+                </div>
+                <p className="mt-3 text-xs text-black/60 dark:text-white/60">No credit card required</p>
+              </div>
+              <div className="relative">
+                <div className="aspect-[4/3] w-full rounded-2xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 shadow-sm backdrop-blur overflow-hidden">
+                  <div className="h-full w-full grid place-items-center">
+                    <div className="text-center px-6">
+                      <div className="mx-auto h-16 w-16 rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 animate-pulse"></div>
+                      <p className="mt-4 text-sm text-black/70 dark:text-white/70">Live editor preview</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section id="features" className="mx-auto max-w-6xl px-6 py-12 sm:py-20">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Everything you need to ship words faster</h2>
+            <p className="mt-3 text-black/70 dark:text-white/70">Powerful AI features designed for creators, marketers, and teams.</p>
+          </div>
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <FeatureCard icon="🧠" title="Smart drafts" desc="Turn bullet points into polished paragraphs instantly." />
+            <FeatureCard icon="🎯" title="Brand voice" desc="Custom tone and style guides that keep you consistent." />
+            <FeatureCard icon="⚡" title="Instant rewrite" desc="Rewrite for clarity, brevity, or persuasion in one click." />
+            <FeatureCard icon="🌐" title="Multilingual" desc="Write and translate across 25+ languages." />
+            <FeatureCard icon="🔒" title="Secure by default" desc="Your data stays private with enterprise-grade security." />
+            <FeatureCard icon="🤝" title="Collaborative" desc="Comment, suggest, and approve with your team." />
+          </div>
+        </section>
+
+        {/* Social proof */}
+        <section id="testimonials" className="px-6 py-12 sm:py-20 bg-white/50 dark:bg-black/20 border-y border-black/5 dark:border-white/10">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <Testimonial quote="InscribeAI cut our content production time by 60%." author="Head of Content, SaaSCo" />
+              <Testimonial quote="Best AI writing tool we've tried—on brand, every time." author="Marketing Lead, Fintech" />
+              <Testimonial quote="Our team finally ships fast without sacrificing quality." author="Founder, Studio" />
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section id="cta" className="mx-auto max-w-6xl px-6 py-14 sm:py-24">
+          <div className="rounded-2xl border border-black/10 dark:border-white/15 bg-gradient-to-br from-indigo-600 to-fuchsia-600 p-6 sm:p-10 text-white">
+            <div className="grid gap-6 sm:grid-cols-[1.5fr_1fr] items-center">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">Start writing smarter today</h3>
+                <p className="mt-2 text-white/90">Try InscribeAI free for 7 days. Cancel anytime.</p>
+              </div>
+              <form className="flex flex-col sm:flex-row gap-3" aria-label="Email signup">
+                <label htmlFor="email" className="sr-only">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@company.com" className="h-12 flex-1 rounded-full px-4 text-black placeholder:text-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70" />
+                <button type="submit" className="h-12 rounded-full bg-white px-6 text-sm font-semibold text-indigo-700 hover:bg-white/95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Start free trial</button>
+              </form>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="px-6 py-10 border-t border-black/5 dark:border-white/10">
+        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-black/70 dark:text-white/70">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-6 rounded bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <span>© {new Date().getFullYear()} InscribeAI</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded">Privacy</a>
+            <a href="#" className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded">Terms</a>
+            <a href="#" className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded">Contact</a>
+          </div>
+        </div>
       </footer>
     </div>
+  );
+}
+
+type FeatureCardProps = {
+  icon: string;
+  title: string;
+  desc: string;
+};
+
+function FeatureCard({ icon, title, desc }: FeatureCardProps) {
+  return (
+    <div className="group relative overflow-hidden rounded-xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 p-5 shadow-sm backdrop-blur transition hover:shadow">
+      <div className="flex items-start gap-3">
+        <div className="text-2xl" aria-hidden>{icon}</div>
+        <div>
+          <h3 className="text-base font-semibold tracking-tight">{title}</h3>
+          <p className="mt-1 text-sm text-black/70 dark:text-white/70">{desc}</p>
+        </div>
+      </div>
+      <div aria-hidden className="pointer-events-none absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-indigo-500/10 transition duration-500 group-hover:scale-125"></div>
+    </div>
+  );
+}
+
+type TestimonialProps = {
+  quote: string;
+  author: string;
+};
+
+function Testimonial({ quote, author }: TestimonialProps) {
+  return (
+    <figure className="rounded-xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 p-5 shadow-sm backdrop-blur">
+      <blockquote className="text-sm leading-relaxed">“{quote}”</blockquote>
+      <figcaption className="mt-3 text-xs text-black/70 dark:text-white/70">— {author}</figcaption>
+    </figure>
   );
 }
