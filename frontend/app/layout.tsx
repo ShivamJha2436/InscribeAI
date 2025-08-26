@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "InscribeAI",
-  description: "AI-powered note-taking app",
+  description: "AI-augmented notes — write, summarize, search, and ask.",
 };
 
 export default function RootLayout({
