@@ -1,4 +1,4 @@
-import { SearchBar } from "../common/Searchbar";
+import { SearchBar } from "../common/SearchBar";
 
 export default function Navbar() {
   return (

@@ -1,16 +1,18 @@
-import NoteCard from "@/components/notes/NoteCard";
+import { useState } from "react";
+import AIHelper from "../../../components/notes/AIHelper";
 
-const dummyNotes = [
-  { id: "1", title: "Postgres Notes", summary: "Learn about pgvector", tags: ["db", "postgres"] },
-  { id: "2", title: "Next.js Tips", summary: "Server-side rendering, ISR", tags: ["frontend", "nextjs"] },
-];
+export default function NoteEditorPage({ params }: { params: { id: string } }) {
+  const [content, setContent] = useState("Start writing your note here...");
 
-export default function NotesPage() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {dummyNotes.map((note) => (
-        <NoteCard key={note.id} note={note} />
-      ))}
+    <div className="flex gap-4">
+      <textarea
+        className="flex-1 p-4 rounded border focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        rows={20}
+      />
+      <AIHelper noteContent={content} />
     </div>
   );
 }
