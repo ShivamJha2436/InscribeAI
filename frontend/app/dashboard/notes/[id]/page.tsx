@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AIHelper from "../../../components/notes/AIHelper";
+import AIHelper from "@/components/notes/AIHelper";
 
 export default function NoteEditorPage({ params }: { params: { id: string } }) {
   const [content, setContent] = useState("Start writing your note here...");
