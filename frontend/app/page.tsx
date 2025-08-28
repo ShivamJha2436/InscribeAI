@@ -40,7 +40,7 @@ export default function Home() {
                   Write faster. Sound smarter. Stay on brand.
                 </h1>
                 <p className="mt-4 text-base sm:text-lg text-black/70 dark:text-white/70 leading-relaxed">
-                  InscribeAI helps you draft, edit, and polish content across emails, blogs, and docs. Generate on-brand copy in seconds with human-level clarity.
+                  InscribeAI helps you draft, edit, and polish content across emails, blogs, and docs with the power of AI. Generate on-brand copy in seconds with human-level clarity.
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <a href="/dashboard" className="inline-flex h-12 items-center justify-center rounded-full bg-indigo-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
