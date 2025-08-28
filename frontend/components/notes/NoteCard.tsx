@@ -17,7 +17,7 @@ export default function NoteCard({ note }: { note: Note }) {
       <p className="text-gray-600">{note.summary}</p>
       <div className="flex gap-2 mt-2">
         {note.tags.map((tag) => (
-          <span key={tag} className="text-xs bg-gray-200 px-2 py-1 rounded">
+          <span key={tag} className="text-xs bg-gray-300 px-2 py-1 rounded">
             {tag}
           </span>
         ))}
