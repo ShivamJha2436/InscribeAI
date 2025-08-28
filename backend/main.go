@@ -36,9 +36,10 @@ func main() {
 	noteService := services.NewNoteService(store)
 	userStore := store // PostgresStore implements UserStore interface
 	authService := services.NewAuthService(userStore, "dev-secret-change-me")
+	aiService := services.NewAIService()
 
 	// Create router
-	router := api.NewRouter(noteService, authService)
+	router := api.NewRouter(noteService, authService, aiService)
 
 	// Create server
 	server := &http.Server{

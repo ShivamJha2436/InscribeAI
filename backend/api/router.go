@@ -12,7 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func NewRouter(notes *services.NoteService, auth *services.AuthService) http.Handler {
+func NewRouter(notes *services.NoteService, auth *services.AuthService, ai *services.AIService) http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +58,95 @@ func NewRouter(notes *services.NoteService, auth *services.AuthService) http.Han
 		}
 		_ = json.NewEncoder(w).Encode(map[string]any{"user": map[string]any{"id": user.ID, "name": user.Name, "email": user.Email}, "token": token})
 	})))
+
+	// AI endpoints (protected)
+	mux.Handle("/api/ai/summarize", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var body struct{ Content string }
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			writeErr(w, http.StatusBadRequest, err)
+			return
+		}
+
+		summary, err := ai.SummarizeNote(r.Context(), body.Content)
+		if err != nil {
+			writeErr(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(map[string]string{"summary": summary})
+	}), auth)))
+
+	mux.Handle("/api/ai/suggest-tags", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var body struct{ Content string }
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			writeErr(w, http.StatusBadRequest, err)
+			return
+		}
+
+		tags, err := ai.SuggestTags(r.Context(), body.Content)
+		if err != nil {
+			writeErr(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(map[string]any{"tags": tags})
+	}), auth)))
+
+	mux.Handle("/api/ai/enhance", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var body struct{ Content string }
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			writeErr(w, http.StatusBadRequest, err)
+			return
+		}
+
+		enhanced, err := ai.EnhanceContent(r.Context(), body.Content)
+		if err != nil {
+			writeErr(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(map[string]string{"enhanced": enhanced})
+	}), auth)))
+
+	mux.Handle("/api/ai/generate", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method != http.MethodPost {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+
+		var body struct{ Bullets string }
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			writeErr(w, http.StatusBadRequest, err)
+			return
+		}
+
+		content, err := ai.GenerateContentFromBullets(r.Context(), body.Bullets)
+		if err != nil {
+			writeErr(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(map[string]string{"content": content})
+	}), auth)))
 
 	// Protected note endpoints
 	mux.Handle("/api/notes", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
