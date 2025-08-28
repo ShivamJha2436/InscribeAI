@@ -8,7 +8,7 @@ export default function Home() {
         <nav className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500"></div>
-            <span className="text-base sm:text-lg font-semibold tracking-tight">InscribeAI</span>
+            <span className="text-base sm:text-lg font-bold tracking-tight">InscribeAI</span>
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm">
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#features">Features</a>
