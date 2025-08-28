@@ -14,7 +14,7 @@ export default function NoteCard({ note }: { note: Note }) {
       className="p-4 bg-white rounded shadow hover:shadow-lg transition"
     >
       <h2 className="font-bold text-lg">{note.title}</h2>
-      <p className="text-gray-600">{note.summary}</p>
+      <p className="text-gray-700">{note.summary}</p>
       <div className="flex gap-2 mt-2">
         {note.tags.map((tag) => (
           <span key={tag} className="text-xs bg-gray-300 px-2 py-1 rounded">
