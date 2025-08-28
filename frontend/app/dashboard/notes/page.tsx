@@ -111,7 +111,7 @@ export default function NotesPage() {
 
       {notes && notes.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">Create your first note to get started!</p>
+          <p className="text-muted-foreground mb-4">Create your first note to get started! Use AI to help you write.</p>
           <button 
             onClick={() => router.push("/dashboard/notes/new")}
             className="h-10 inline-flex items-center rounded-full bg-indigo-600 text-white px-6 text-sm font-medium hover:bg-indigo-500"
