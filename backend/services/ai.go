@@ -150,3 +150,4 @@ func (ai *AIService) callOpenAI(ctx context.Context, prompt string, temperature 
 
 	return openAIResp.Choices[0].Message.Content, nil
 }
+
