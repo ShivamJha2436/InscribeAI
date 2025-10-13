@@ -14,15 +14,32 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// PostgresStore implements both UserStore and note store interfaces
+// Store interface for both PostgreSQL and SQLite
+type Store interface {
+	// User operations
+	GetUserByEmail(ctx context.Context, email string) (models.User, error)
+	CreateUser(ctx context.Context, u models.User) (models.User, error)
+
+	// Note operations
+	ListNotes(ctx context.Context, userID string) ([]models.Note, error)
+	GetNote(ctx context.Context, id, userID string) (models.Note, error)
+	CreateNote(ctx context.Context, n models.Note, userID string) (models.Note, error)
+	UpdateNote(ctx context.Context, id, userID string, n models.Note) (models.Note, error)
+	DeleteNote(ctx context.Context, id, userID string) error
+
+	// Cleanup
+	Close()
+}
+
+// PostgresStore implements Store interface
 type PostgresStore struct {
 	pool *pgxpool.Pool
 }
 
-// Ensure PostgresStore implements UserStore interface
-var _ UserStore = (*PostgresStore)(nil)
+// Ensure PostgresStore implements Store interface
+var _ Store = (*PostgresStore)(nil)
 
-// UserStore interface for auth service
+// UserStore interface for auth service (kept for backward compatibility)
 type UserStore interface {
 	GetUserByEmail(ctx context.Context, email string) (models.User, error)
 	CreateUser(ctx context.Context, u models.User) (models.User, error)

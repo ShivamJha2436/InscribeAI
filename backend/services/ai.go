@@ -19,29 +19,16 @@ type AIService struct {
 	provider AIProvider
 }
 
-type OpenAIRequest struct {
-	Model       string    `json:"model"`
-	Messages    []Message `json:"messages"`
-	Temperature float64   `json:"temperature"`
-	MaxTokens   int       `json:"max_tokens"`
-}
-
-type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-}
-
-type OpenAIResponse struct {
-	Choices []struct {
-		Message struct {
-			Content string `json:"content"`
-		} `json:"message"`
-	} `json:"choices"`
-}
-
 func NewAIService() *AIService {
-	// Default to OpenAI provider for now; replace with GPT4AllProvider later
-	return &AIService{provider: NewOpenAIProvider(os.Getenv("OPENAI_API_KEY"))}
+	// Check if GPT4All is configured
+	gpt4allURL := os.Getenv("GPT4ALL_PYTHON_SERVICE_URL")
+	if gpt4allURL != "" {
+		return &AIService{provider: NewGPT4AllProvider(gpt4allURL)}
+	}
+
+	// Default to OpenAI provider
+	apiKey := os.Getenv("OPENAI_API_KEY")
+	return &AIService{provider: NewOpenAIProvider(apiKey)}
 }
 
 // SummarizeNote generates a concise summary of the note content
@@ -99,7 +86,7 @@ Full content:`, bullets)
 	return ai.provider.Chat(ctx, prompt, 0.7)
 }
 
-// OpenAIProvider implements AIProvider using OpenAI API. Placeholder until GPT4All is integrated.
+// OpenAIProvider implements AIProvider using OpenAI API.
 type OpenAIProvider struct {
 	apiKey string
 	client *http.Client
@@ -158,4 +145,78 @@ func (p *OpenAIProvider) Chat(ctx context.Context, prompt string, temperature fl
 	}
 
 	return openAIResp.Choices[0].Message.Content, nil
+}
+
+// GPT4AllProvider implements AIProvider using local GPT4All via Python service.
+type GPT4AllProvider struct {
+	serviceURL string
+	client     *http.Client
+}
+
+func NewGPT4AllProvider(serviceURL string) *GPT4AllProvider {
+	return &GPT4AllProvider{
+		serviceURL: serviceURL,
+		client:     &http.Client{},
+	}
+}
+
+func (p *GPT4AllProvider) Chat(ctx context.Context, prompt string, temperature float64) (string, error) {
+	request := map[string]interface{}{
+		"prompt":      prompt,
+		"temperature": temperature,
+	}
+
+	jsonData, err := json.Marshal(request)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", p.serviceURL+"/chat", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := p.client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to make request to GPT4All service: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("GPT4All service returned status: %d", resp.StatusCode)
+	}
+
+	var gpt4allResp map[string]string
+	if err := json.NewDecoder(resp.Body).Decode(&gpt4allResp); err != nil {
+		return "", fmt.Errorf("failed to decode GPT4All response: %w", err)
+	}
+
+	output, ok := gpt4allResp["output"]
+	if !ok {
+		return "", fmt.Errorf("no output in GPT4All response")
+	}
+
+	return output, nil
+}
+
+type OpenAIRequest struct {
+	Model       string    `json:"model"`
+	Messages    []Message `json:"messages"`
+	Temperature float64   `json:"temperature"`
+	MaxTokens   int       `json:"max_tokens"`
+}
+
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type OpenAIResponse struct {
+	Choices []struct {
+		Message struct {
+			Content string `json:"content"`
+		} `json:"message"`
+	} `json:"choices"`
 }

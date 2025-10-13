@@ -7,10 +7,10 @@ import (
 )
 
 type NoteService struct {
-	store *db.PostgresStore
+	store db.Store
 }
 
-func NewNoteService(store *db.PostgresStore) *NoteService {
+func NewNoteService(store db.Store) *NoteService {
 	return &NoteService{store: store}
 }
 

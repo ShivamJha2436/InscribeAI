@@ -3,38 +3,75 @@
 function UseCasesGrid() {
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-      <p className="mt-2 text-sm text-black/70 dark:text-white/70">Choose a use case to get started.</p>
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <a href="/dashboard/compose" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">✍️</div>
-          <div className="mt-2 font-semibold">AI Compose</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Generate content from a prompt.</div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Welcome to InscribeAI</h1>
+        <p className="text-slate-600 dark:text-slate-400">Choose a use case to get started with AI-powered writing.</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/dashboard/compose" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">✍️</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">AI Compose</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Generate content from a prompt.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
-        <a href="/dashboard/enhance" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">✨</div>
-          <div className="mt-2 font-semibold">AI Enhance / Rewrite</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Improve clarity, tone, and conciseness.</div>
+        
+        <a href="/dashboard/enhance" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">✨</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">AI Enhance / Rewrite</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Improve clarity, tone, and conciseness.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
-        <a href="/dashboard/brand" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">🧭</div>
-          <div className="mt-2 font-semibold">Brand Tone Customization</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Maintain consistent brand voice.</div>
+        
+        <a href="/dashboard/brand" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">🧭</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Brand Tone Customization</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Maintain consistent brand voice.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
-        <a href="/dashboard/history" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">📂</div>
-          <div className="mt-2 font-semibold">Content History</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Revisit previous AI drafts.</div>
+        
+        <a href="/dashboard/history" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">📂</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Content History</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Revisit previous AI drafts.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
-        <a href="/dashboard/collaboration" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">👥</div>
-          <div className="mt-2 font-semibold">Team Collaboration</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Share, edit, and comment on drafts.</div>
+        
+        <a href="/dashboard/collaboration" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">👥</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Team Collaboration</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Share, edit, and comment on drafts.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
-        <a href="/dashboard/settings" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
-          <div className="text-xl">⚙️</div>
-          <div className="mt-2 font-semibold">Settings</div>
-          <div className="text-sm text-black/70 dark:text-white/70">Manage API keys, models, and tone.</div>
+        
+        <a href="/dashboard/settings" className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">⚙️</div>
+            <div>
+              <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Settings</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Manage API keys, models, and tone.</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
         </a>
       </div>
     </div>
