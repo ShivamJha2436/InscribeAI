@@ -18,7 +18,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-white/70 dark:bg-black/30 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4">
-        <Link href="/dashboard" className="text-sm font-semibold hover:opacity-80">InscribeAI</Link>
+        <Link href="/dashboard" className="text-sm font-semibold hover:opacity-80 flex items-center gap-2">
+          <img src="/inscribe-ai-logo.png" alt="InscribeAI" className="h-6 w-6 rounded" />
+          InscribeAI
+        </Link>
         <nav className="hidden sm:flex items-center gap-4 text-sm text-muted-foreground">
           <Link href="/docs" className="hover:opacity-80">Docs</Link>
         </nav>

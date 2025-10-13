@@ -7,11 +7,12 @@ export default function Home() {
       <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-black/30 border-b border-black/5 dark:border-white/10">
         <nav className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <img src="/inscribe-ai-logo.png" alt="InscribeAI" className="h-9 w-9 rounded-lg" />
             <span className="text-base sm:text-lg font-bold tracking-tight">InscribeAI</span>
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm">
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#use-cases">Use Cases</a>
+            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="/docs">Docs</a>
           </div>
           <div className="flex items-center gap-3">
             <a href="/auth/login" className="inline-flex h-10 items-center rounded-full border border-black/10 dark:border-white/15 px-4 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Login</a>
@@ -86,7 +87,7 @@ export default function Home() {
       <footer className="px-6 py-10 border-t border-black/5 dark:border-white/10">
         <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-black/70 dark:text-white/70">
           <div className="flex items-center gap-3">
-            <div className="h-6 w-6 rounded bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+            <img src="/inscribe-ai-logo.png" alt="InscribeAI" className="h-6 w-6 rounded" />
             <span>© {new Date().getFullYear()} InscribeAI</span>
           </div>
           <div className="flex items-center gap-4">
