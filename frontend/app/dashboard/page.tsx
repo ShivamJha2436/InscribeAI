@@ -1,3 +1,43 @@
+export default function DashboardIndex() {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+      <p className="mt-2 text-sm text-black/70 dark:text-white/70">Choose a use case to get started.</p>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="/dashboard/compose" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">✍️</div>
+          <div className="mt-2 font-semibold">AI Compose</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Generate content from a prompt.</div>
+        </a>
+        <a href="/dashboard/enhance" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">✨</div>
+          <div className="mt-2 font-semibold">AI Enhance / Rewrite</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Improve clarity, tone, and conciseness.</div>
+        </a>
+        <a href="/dashboard/brand" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">🧭</div>
+          <div className="mt-2 font-semibold">Brand Tone Customization</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Maintain consistent brand voice.</div>
+        </a>
+        <a href="/dashboard/history" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">📂</div>
+          <div className="mt-2 font-semibold">Content History</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Revisit previous AI drafts.</div>
+        </a>
+        <a href="/dashboard/collaboration" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">👥</div>
+          <div className="mt-2 font-semibold">Team Collaboration</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Share, edit, and comment on drafts.</div>
+        </a>
+        <a href="/dashboard/settings" className="rounded-lg border border-black/10 dark:border-white/15 p-4 hover:bg-black/5 dark:hover:bg-white/10">
+          <div className="text-xl">⚙️</div>
+          <div className="mt-2 font-semibold">Settings</div>
+          <div className="text-sm text-black/70 dark:text-white/70">Manage API keys, models, and tone.</div>
+        </a>
+      </div>
+    </div>
+  );
+}
 "use client";
 
 import { useEffect, useState } from "react";

@@ -10,7 +10,7 @@ export default function Home() {
             <span className="text-base sm:text-lg font-bold tracking-tight">InscribeAI</span>
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm">
-            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#features">Features</a>
+            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#use-cases">Use Cases</a>
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#testimonials">Testimonials</a>
           </div>
           <div className="flex items-center gap-3">
@@ -33,13 +33,13 @@ export default function Home() {
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-medium rounded-full border border-black/10 dark:border-white/15 px-2.5 py-1 text-black/70 dark:text-white/70">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                  AI writing copilot for teams
+                  Collaborative AI-powered writing assistant
                 </p>
                 <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1]">
-                  Write faster. Sound smarter. Stay on brand.
+                  InscribeAI is a collaborative AI-powered writing assistant for teams.
                 </h1>
                 <p className="mt-4 text-base sm:text-lg text-black/70 dark:text-white/70 leading-relaxed">
-                  InscribeAI helps you draft, edit, and polish content across emails, blogs, and docs with the power of AI. Generate on-brand copy in seconds with human-level clarity.
+                  It helps users generate, edit, and refine text across emails, blogs, and documents using LLMs — while staying consistent with brand tone and team context.
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                   <a href="/dashboard" className="inline-flex h-12 items-center justify-center rounded-full bg-indigo-600 px-6 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">
@@ -64,19 +64,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features */}
-        <section id="features" className="mx-auto max-w-6xl px-6 py-12 sm:py-20">
+        {/* Core Use Cases */}
+        <section id="use-cases" className="mx-auto max-w-6xl px-6 py-12 sm:py-20">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Everything you need to ship words faster</h2>
-            <p className="mt-3 text-black/70 dark:text-white/70">Powerful AI features designed for creators, marketers, and teams.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Core Use Cases</h2>
+            <p className="mt-3 text-black/70 dark:text-white/70">Generate, enhance, and collaborate—always on brand.</p>
           </div>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard icon="🧠" title="Smart drafts" desc="Turn bullet points into polished paragraphs instantly." />
-            <FeatureCard icon="🎯" title="Brand voice" desc="Custom tone and style guides that keep you consistent." />
-            <FeatureCard icon="⚡" title="Instant rewrite" desc="Rewrite for clarity, brevity, or persuasion in one click." />
-            <FeatureCard icon="🌐" title="Multilingual" desc="Write and translate across 25+ languages." />
-            <FeatureCard icon="🔒" title="Secure by default" desc="Your data stays private with enterprise-grade security." />
-            <FeatureCard icon="🤝" title="Collaborative" desc="Comment, suggest, and approve with your team." />
+            <FeatureCard icon="✍️" title="AI Compose" desc="Generate content from a prompt (e.g., “Write a blog intro about AI trends 2025”)." href="/dashboard/compose" />
+            <FeatureCard icon="✨" title="AI Enhance / Rewrite" desc="Improve clarity, grammar, tone, or conciseness of existing text." href="/dashboard/enhance" />
+            <FeatureCard icon="🧭" title="Brand Tone Customization" desc="Maintain brand voice by training prompts on team content." href="/dashboard/brand" />
+            <FeatureCard icon="📂" title="Content History" desc="Save and revisit previous AI drafts." href="/dashboard/history" />
+            <FeatureCard icon="👥" title="Team Collaboration" desc="Multiple users can share, edit, and comment on drafts." href="/dashboard/collaboration" />
+            <FeatureCard icon="⚙️" title="Settings" desc="Manage API keys, LLM models, and tone preferences." href="/dashboard/settings" />
           </div>
         </section>
 
@@ -115,10 +115,11 @@ type FeatureCardProps = {
   icon: string;
   title: string;
   desc: string;
+  href?: string;
 };
 
-function FeatureCard({ icon, title, desc }: FeatureCardProps) {
-  return (
+function FeatureCard({ icon, title, desc, href }: FeatureCardProps) {
+  const Card = (
     <div className="group relative overflow-hidden rounded-xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 p-5 shadow-sm backdrop-blur transition hover:shadow">
       <div className="flex items-start gap-3">
         <div className="text-2xl" aria-hidden>{icon}</div>
@@ -130,6 +131,9 @@ function FeatureCard({ icon, title, desc }: FeatureCardProps) {
       <div aria-hidden className="pointer-events-none absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-indigo-500/10 transition duration-500 group-hover:scale-125"></div>
     </div>
   );
+  return href ? (
+    <a href={href} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl">{Card}</a>
+  ) : Card;
 }
 
 type TestimonialProps = {
