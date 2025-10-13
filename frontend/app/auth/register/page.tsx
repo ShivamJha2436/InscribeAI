@@ -2,6 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { z } from "zod";
+
+const RegisterSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,6 +23,11 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
+      const parsed = RegisterSchema.safeParse({ name, email, password });
+      if (!parsed.success) {
+        const first = parsed.error.errors[0]?.message || "Invalid input";
+        throw new Error(first);
+      }
       const res = await fetch("http://localhost:8080/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -1,278 +1,201 @@
 package api
 
 import (
-	"context"
-	"encoding/json"
 	"net/http"
 	"strings"
 
 	"inscribeai/backend/models"
 	"inscribeai/backend/services"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 func NewRouter(notes *services.NoteService, auth *services.AuthService, ai *services.AIService) http.Handler {
-	mux := http.NewServeMux()
+	r := gin.New()
+	r.Use(gin.Logger(), gin.Recovery())
 
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
 	// Auth endpoints
-	mux.Handle("/api/auth/register", cors(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
+	r.POST("/api/auth/register", func(c *gin.Context) {
 		var body struct{ Name, Email, Password string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		user, token, err := auth.Register(r.Context(), body.Name, body.Email, body.Password)
+		user, token, err := auth.Register(c.Request.Context(), body.Name, body.Email, body.Password)
 		if err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		_ = json.NewEncoder(w).Encode(map[string]any{"user": map[string]any{"id": user.ID, "name": user.Name, "email": user.Email}, "token": token})
-	})))
+		c.JSON(http.StatusOK, gin.H{"user": gin.H{"id": user.ID, "name": user.Name, "email": user.Email}, "token": token})
+	})
 
-	mux.Handle("/api/auth/login", cors(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
+	r.POST("/api/auth/login", func(c *gin.Context) {
 		var body struct{ Email, Password string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		user, token, err := auth.Login(r.Context(), body.Email, body.Password)
+		user, token, err := auth.Login(c.Request.Context(), body.Email, body.Password)
 		if err != nil {
-			writeErr(w, http.StatusUnauthorized, err)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			return
 		}
-		_ = json.NewEncoder(w).Encode(map[string]any{"user": map[string]any{"id": user.ID, "name": user.Name, "email": user.Email}, "token": token})
-	})))
+		c.JSON(http.StatusOK, gin.H{"user": gin.H{"id": user.ID, "name": user.Name, "email": user.Email}, "token": token})
+	})
 
 	// AI endpoints (protected)
-	mux.Handle("/api/ai/summarize", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-
+	authGroup := r.Group("/api/ai", ginAuthMiddleware(auth))
+	authGroup.POST("/summarize", func(c *gin.Context) {
 		var body struct{ Content string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		summary, err := ai.SummarizeNote(r.Context(), body.Content)
+		summary, err := ai.SummarizeNote(c.Request.Context(), body.Content)
 		if err != nil {
-			writeErr(w, http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		c.JSON(http.StatusOK, gin.H{"summary": summary})
+	})
 
-		_ = json.NewEncoder(w).Encode(map[string]string{"summary": summary})
-	}), auth)))
-
-	mux.Handle("/api/ai/suggest-tags", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-
+	authGroup.POST("/suggest-tags", func(c *gin.Context) {
 		var body struct{ Content string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		tags, err := ai.SuggestTags(r.Context(), body.Content)
+		tags, err := ai.SuggestTags(c.Request.Context(), body.Content)
 		if err != nil {
-			writeErr(w, http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		c.JSON(http.StatusOK, gin.H{"tags": tags})
+	})
 
-		_ = json.NewEncoder(w).Encode(map[string]any{"tags": tags})
-	}), auth)))
-
-	mux.Handle("/api/ai/enhance", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-
+	authGroup.POST("/enhance", func(c *gin.Context) {
 		var body struct{ Content string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		enhanced, err := ai.EnhanceContent(r.Context(), body.Content)
+		enhanced, err := ai.EnhanceContent(c.Request.Context(), body.Content)
 		if err != nil {
-			writeErr(w, http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		c.JSON(http.StatusOK, gin.H{"enhanced": enhanced})
+	})
 
-		_ = json.NewEncoder(w).Encode(map[string]string{"enhanced": enhanced})
-	}), auth)))
-
-	mux.Handle("/api/ai/generate", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-
+	authGroup.POST("/generate", func(c *gin.Context) {
 		var body struct{ Bullets string }
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			writeErr(w, http.StatusBadRequest, err)
+		if err := c.BindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		content, err := ai.GenerateContentFromBullets(r.Context(), body.Bullets)
+		content, err := ai.GenerateContentFromBullets(c.Request.Context(), body.Bullets)
 		if err != nil {
-			writeErr(w, http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-
-		_ = json.NewEncoder(w).Encode(map[string]string{"content": content})
-	}), auth)))
+		c.JSON(http.StatusOK, gin.H{"content": content})
+	})
 
 	// Protected note endpoints
-	mux.Handle("/api/notes", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		userID := r.Context().Value("userID").(string)
-
-		switch r.Method {
-		case http.MethodGet:
-			ns, err := notes.ListNotes(r.Context(), userID)
-			if err != nil {
-				writeErr(w, http.StatusInternalServerError, err)
-				return
-			}
-			_ = json.NewEncoder(w).Encode(ns)
-		case http.MethodPost:
-			var n models.Note
-			if err := json.NewDecoder(r.Body).Decode(&n); err != nil {
-				writeErr(w, http.StatusBadRequest, err)
-				return
-			}
-			created, err := notes.CreateNote(r.Context(), n, userID)
-			if err != nil {
-				writeErr(w, http.StatusInternalServerError, err)
-				return
-			}
-			w.WriteHeader(http.StatusCreated)
-			_ = json.NewEncoder(w).Encode(created)
-		default:
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	}), auth)))
-
-	mux.Handle("/api/notes/", cors(authMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		userID := r.Context().Value("userID").(string)
-		id := strings.TrimPrefix(r.URL.Path, "/api/notes/")
-		if id == "" {
-			w.WriteHeader(http.StatusNotFound)
+	notesGroup := r.Group("/api/notes", ginAuthMiddleware(auth))
+	notesGroup.GET("", func(c *gin.Context) {
+		userID := c.GetString("userID")
+		ns, err := notes.ListNotes(c.Request.Context(), userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-
-		switch r.Method {
-		case http.MethodGet:
-			n, err := notes.GetNote(r.Context(), id, userID)
-			if err != nil {
-				writeErr(w, http.StatusNotFound, err)
-				return
-			}
-			_ = json.NewEncoder(w).Encode(n)
-		case http.MethodPut, http.MethodPatch:
-			var n models.Note
-			if err := json.NewDecoder(r.Body).Decode(&n); err != nil {
-				writeErr(w, http.StatusBadRequest, err)
-				return
-			}
-			updated, err := notes.UpdateNote(r.Context(), id, userID, n)
-			if err != nil {
-				writeErr(w, http.StatusNotFound, err)
-				return
-			}
-			_ = json.NewEncoder(w).Encode(updated)
-		case http.MethodDelete:
-			if err := notes.DeleteNote(r.Context(), id, userID); err != nil {
-				writeErr(w, http.StatusNotFound, err)
-				return
-			}
-			w.WriteHeader(http.StatusNoContent)
-		default:
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	}), auth)))
-
-	return mux
-}
-
-func writeErr(w http.ResponseWriter, code int, err error) {
-	w.WriteHeader(code)
-	_ = json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
-}
-
-func cors(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
-		next.ServeHTTP(w, r)
+		c.JSON(http.StatusOK, ns)
 	})
-}
-
-func authMiddleware(next http.Handler, auth *services.AuthService) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			writeErr(w, http.StatusUnauthorized, http.ErrNoLocation)
+	notesGroup.POST("", func(c *gin.Context) {
+		userID := c.GetString("userID")
+		var n models.Note
+		if err := c.BindJSON(&n); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		created, err := notes.CreateNote(c.Request.Context(), n, userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusCreated, created)
+	})
 
+	notesGroup.GET("/:id", func(c *gin.Context) {
+		userID := c.GetString("userID")
+		id := c.Param("id")
+		n, err := notes.GetNote(c.Request.Context(), id, userID)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, n)
+	})
+	notesGroup.PUT("/:id", func(c *gin.Context) {
+		userID := c.GetString("userID")
+		id := c.Param("id")
+		var n models.Note
+		if err := c.BindJSON(&n); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		updated, err := notes.UpdateNote(c.Request.Context(), id, userID, n)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, updated)
+	})
+	notesGroup.DELETE("/:id", func(c *gin.Context) {
+		userID := c.GetString("userID")
+		id := c.Param("id")
+		if err := notes.DeleteNote(c.Request.Context(), id, userID); err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.Status(http.StatusNoContent)
+	})
+
+	return r
+}
+
+func ginAuthMiddleware(auth *services.AuthService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": http.ErrNoLocation.Error()})
+			return
+		}
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		if tokenString == authHeader {
-			writeErr(w, http.StatusUnauthorized, http.ErrNoLocation)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": http.ErrNoLocation.Error()})
 			return
 		}
-
-		// For now, we'll just extract userID from the token without full validation
-		// In production, you'd want to validate the JWT signature
 		claims := jwt.MapClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("dev-secret-change-me"), nil
 		})
-
 		if err != nil || !token.Valid {
-			writeErr(w, http.StatusUnauthorized, http.ErrNoLocation)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": http.ErrNoLocation.Error()})
 			return
 		}
-
 		userID, ok := claims["sub"].(string)
 		if !ok {
-			writeErr(w, http.StatusUnauthorized, http.ErrNoLocation)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": http.ErrNoLocation.Error()})
 			return
 		}
-
-		ctx := context.WithValue(r.Context(), "userID", userID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+		c.Set("userID", userID)
+		c.Next()
+	}
 }

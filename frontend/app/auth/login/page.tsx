@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { z } from "zod";
+
+const LoginSchema = z.object({
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +21,11 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
+      const parsed = LoginSchema.safeParse({ email, password });
+      if (!parsed.success) {
+        const first = parsed.error.errors[0]?.message || "Invalid input";
+        throw new Error(first);
+      }
       const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

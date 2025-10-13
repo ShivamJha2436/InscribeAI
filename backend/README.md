@@ -87,3 +87,22 @@ The backend automatically creates tables on startup:
 - `notes`: User notes with foreign key to users
 
 CORS is open for local development.
+
+# Backend Setup
+
+## Stack
+- Go 1.22, Gin for HTTP routing
+- PostgreSQL (free tier compatible: Neon, Supabase, Railway)
+- JWT auth
+- Pluggable AI provider (OpenAI default, GPT4All stub)
+
+## Env
+- `DATABASE_URL` e.g. `postgres://user:pass@host:5432/db?sslmode=disable`
+- `OPENAI_API_KEY` (optional, for default provider)
+
+## Run
+- `go run ./main.go`
+
+## GPT4All plan
+- Replace `AIService` provider with `GPT4AllProvider`
+- Or call local Python FastAPI microservice (see `/python/llm/`)

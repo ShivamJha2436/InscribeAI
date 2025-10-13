@@ -1,4 +1,5 @@
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { typography as t } from "@/lib/utils";
 
 export default function Home() {
   return (
@@ -35,10 +36,10 @@ export default function Home() {
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                   Collaborative AI-powered writing assistant
                 </p>
-                <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1]">
+                <h1 className={`mt-4 ${t.display}`}>
                   InscribeAI is a collaborative AI-powered writing assistant for teams.
                 </h1>
-                <p className="mt-4 text-base sm:text-lg text-black/70 dark:text-white/70 leading-relaxed">
+                <p className={`mt-4 ${t.subhead} leading-relaxed`}>
                   It helps users generate, edit, and refine text across emails, blogs, and documents using LLMs — while staying consistent with brand tone and team context.
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">

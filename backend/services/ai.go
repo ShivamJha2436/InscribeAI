@@ -10,9 +10,13 @@ import (
 	"strings"
 )
 
+// AIProvider abstracts underlying LLM provider implementations.
+type AIProvider interface {
+	Chat(ctx context.Context, prompt string, temperature float64) (string, error)
+}
+
 type AIService struct {
-	apiKey string
-	client *http.Client
+	provider AIProvider
 }
 
 type OpenAIRequest struct {
@@ -36,15 +40,8 @@ type OpenAIResponse struct {
 }
 
 func NewAIService() *AIService {
-	apiKey := os.Getenv("OPENAI_API_KEY")
-	if apiKey == "" {
-		apiKey = "your-openai-api-key-here" // Default for development
-	}
-
-	return &AIService{
-		apiKey: apiKey,
-		client: &http.Client{},
-	}
+	// Default to OpenAI provider for now; replace with GPT4AllProvider later
+	return &AIService{provider: NewOpenAIProvider(os.Getenv("OPENAI_API_KEY"))}
 }
 
 // SummarizeNote generates a concise summary of the note content
@@ -55,7 +52,7 @@ func (ai *AIService) SummarizeNote(ctx context.Context, content string) (string,
 
 Summary:`, content)
 
-	return ai.callOpenAI(ctx, prompt, 0.3)
+	return ai.provider.Chat(ctx, prompt, 0.3)
 }
 
 // SuggestTags suggests relevant tags based on note content
@@ -66,7 +63,7 @@ func (ai *AIService) SuggestTags(ctx context.Context, content string) ([]string,
 
 Tags:`, content)
 
-	response, err := ai.callOpenAI(ctx, prompt, 0.7)
+	response, err := ai.provider.Chat(ctx, prompt, 0.7)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +85,7 @@ func (ai *AIService) EnhanceContent(ctx context.Context, content string) (string
 
 Enhanced version:`, content)
 
-	return ai.callOpenAI(ctx, prompt, 0.5)
+	return ai.provider.Chat(ctx, prompt, 0.5)
 }
 
 // GenerateContentFromBullets creates full content from bullet points
@@ -99,11 +96,23 @@ func (ai *AIService) GenerateContentFromBullets(ctx context.Context, bullets str
 
 Full content:`, bullets)
 
-	return ai.callOpenAI(ctx, prompt, 0.7)
+	return ai.provider.Chat(ctx, prompt, 0.7)
 }
 
-// callOpenAI makes a request to OpenAI's API
-func (ai *AIService) callOpenAI(ctx context.Context, prompt string, temperature float64) (string, error) {
+// OpenAIProvider implements AIProvider using OpenAI API. Placeholder until GPT4All is integrated.
+type OpenAIProvider struct {
+	apiKey string
+	client *http.Client
+}
+
+func NewOpenAIProvider(apiKey string) *OpenAIProvider {
+	if apiKey == "" {
+		apiKey = "your-openai-api-key-here"
+	}
+	return &OpenAIProvider{apiKey: apiKey, client: &http.Client{}}
+}
+
+func (p *OpenAIProvider) Chat(ctx context.Context, prompt string, temperature float64) (string, error) {
 	request := OpenAIRequest{
 		Model: "gpt-3.5-turbo",
 		Messages: []Message{
@@ -127,9 +136,9 @@ func (ai *AIService) callOpenAI(ctx context.Context, prompt string, temperature 
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+ai.apiKey)
+	req.Header.Set("Authorization", "Bearer "+p.apiKey)
 
-	resp, err := ai.client.Do(req)
+	resp, err := p.client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("failed to make request: %w", err)
 	}
@@ -150,4 +159,3 @@ func (ai *AIService) callOpenAI(ctx context.Context, prompt string, temperature 
 
 	return openAIResp.Choices[0].Message.Content, nil
 }
-
