@@ -1,4 +1,6 @@
-export default function DashboardIndex() {
+"use client";
+
+function UseCasesGrid() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
@@ -38,7 +40,6 @@ export default function DashboardIndex() {
     </div>
   );
 }
-"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -134,6 +135,7 @@ export default function DashboardHomePage() {
 
   return (
     <div className="space-y-6">
+      <UseCasesGrid />
       <div className="flex items-baseline justify-between">
         <div>
           <h1 className="text-xl font-bold">Dashboard</h1>
