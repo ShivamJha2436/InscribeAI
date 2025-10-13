@@ -12,7 +12,6 @@ export default function Home() {
           </div>
           <div className="hidden sm:flex items-center gap-6 text-sm">
             <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#use-cases">Use Cases</a>
-            <a className="hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" href="#testimonials">Testimonials</a>
           </div>
           <div className="flex items-center gap-3">
             <a href="/auth/login" className="inline-flex h-10 items-center rounded-full border border-black/10 dark:border-white/15 px-4 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Login</a>
@@ -81,17 +80,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Social proof */}
-        <section id="testimonials" className="px-6 py-12 sm:py-20 bg-white/50 dark:bg-black/20 border-y border-black/5 dark:border-white/10">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <Testimonial quote="InscribeAI cut our content production time by 60%." author="Head of Content, SaaSCo" />
-              <Testimonial quote="Best AI writing tool we've tried—on brand, every time." author="Marketing Lead, Fintech" />
-              <Testimonial quote="Our team finally ships fast without sacrificing quality." author="Founder, Studio" />
-            </div>
-          </div>
-        </section>
-
         
       </main>
 
@@ -137,16 +125,4 @@ function FeatureCard({ icon, title, desc, href }: FeatureCardProps) {
   ) : Card;
 }
 
-type TestimonialProps = {
-  quote: string;
-  author: string;
-};
-
-function Testimonial({ quote, author }: TestimonialProps) {
-  return (
-    <figure className="rounded-xl border border-black/10 dark:border-white/15 bg-white/70 dark:bg-black/30 p-5 shadow-sm backdrop-blur">
-      <blockquote className="text-sm leading-relaxed">“{quote}”</blockquote>
-      <figcaption className="mt-3 text-xs text-black/70 dark:text-white/70">— {author}</figcaption>
-    </figure>
-  );
-}
+ 
