@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export default function Home() {
