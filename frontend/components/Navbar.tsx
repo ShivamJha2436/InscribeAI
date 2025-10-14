@@ -15,7 +15,7 @@ export default function Navbar() {
       {/* Left: Logo and name */}
       <div className="flex items-center space-x-2">
         <Image
-          src="/inscribeai-logo.png"
+          src="/inscribe-ai-logo.png"
           alt="InscribeAI Logo"
           width={40}
           height={40}
