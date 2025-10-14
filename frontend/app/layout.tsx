@@ -1,27 +1,17 @@
+// app/layout.tsx
 import "./globals.css";
 
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/ui/theme-provider";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ReactNode } from "react";
 
 export const metadata = {
-  title: "InscribeAI",
-  description: "Collaborative AI-powered writing assistant for teams. Generate, edit, and refine content while staying on brand.",
+  title: "InscribeAI - AI-Powered Writing Assistant",
+  description: "Write, organize, and think better with AI-powered tools.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
-      </body>
+    <html lang="en">
+      <body className="antialiased bg-white text-gray-900">{children}</body>
     </html>
   );
 }
