@@ -1,17 +1,23 @@
 // app/layout.tsx
 import "./globals.css";
 
-import { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
+import type { ReactNode } from "react";
 
 export const metadata = {
   title: "InscribeAI - AI-Powered Writing Assistant",
-  description: "Write, organize, and think better with AI-powered tools.",
+  description:
+    "Write smarter, summarize faster, and organize your thoughts with AI.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className="antialiased bg-white text-gray-900">{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased bg-white dark:bg-gray-950 transition-colors duration-300">
+        <ThemeProvider attribute="class" defaultTheme="light">
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
