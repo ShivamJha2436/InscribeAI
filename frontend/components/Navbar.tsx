@@ -20,34 +20,35 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <Image
-            src="/inscribe-ai-logo.png"
-            alt="InscribeAI Logo"
-            width={40}
-            height={40}
-          />
+        <Link href="/" className="flex items-center space-x-2">
+          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">I</span>
+          </div>
           <span className="font-bold text-xl text-gray-800 dark:text-gray-100">
             InscribeAI
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6">
-          <Link href="#features" className="hover:text-indigo-600 transition">
+          <Link href="/#features" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition text-gray-700 dark:text-gray-300">
             Features
           </Link>
-          <Link href="/docs" className="hover:text-indigo-600 transition">
+          <Link href="/docs" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition text-gray-700 dark:text-gray-300">
             Docs
           </Link>
 
           <ThemeToggle />
 
           <div className="flex gap-3">
-            <Button variant="outline">Login</Button>
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-              Sign Up
-            </Button>
+            <Link href="/auth/login">
+              <Button variant="outline">Login</Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -63,20 +64,24 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-6 pb-4 flex flex-col gap-3 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
-          <Link href="#features" className="hover:text-indigo-600 transition">
+          <Link href="/#features" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition text-gray-700 dark:text-gray-300">
             Features
           </Link>
-          <Link href="/docs" className="hover:text-indigo-600 transition">
+          <Link href="/docs" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition text-gray-700 dark:text-gray-300">
             Docs
           </Link>
           <ThemeToggle />
           <div className="flex gap-3 mt-3">
-            <Button variant="outline" className="w-full">
-              Login
-            </Button>
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full">
-              Sign Up
-            </Button>
+            <Link href="/auth/login" className="w-full">
+              <Button variant="outline" className="w-full">
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/register" className="w-full">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full">
+                Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
       )}
